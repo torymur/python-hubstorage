@@ -220,6 +220,9 @@ class _BatchWriter(object):
     def write(self, item):
         assert not self.closed, 'attempting writes to a closed writer'
         data = jsonencode(item)
+        logger.info('BatchWriter: item size is {}'.format(len(data)))
+        logger.info('BatchWriter: keys {}'.format(item.keys()))
+        logger.info('BatchWriter: item {}'.format(item))
         if len(data) > self.maxitemsize:
             truncated_data = data[:self.ERRMSG_DATA_TRUNCATION_LEN] + "..."
             raise ValueTooLarge(
