@@ -221,6 +221,7 @@ class _BatchWriter(object):
         assert not self.closed, 'attempting writes to a closed writer'
         data = jsonencode(item)
         logger.info('BatchWriter: item size is {}'.format(len(data)))
+        logger.info('Max item size {}'.format(self.maxitemsize))
         logger.info('BatchWriter: keys {}'.format(item.keys()))
         logger.info('BatchWriter: item {}'.format(item))
         if len(data) > self.maxitemsize:
