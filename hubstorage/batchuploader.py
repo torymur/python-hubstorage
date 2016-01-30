@@ -221,11 +221,10 @@ class _BatchWriter(object):
         assert not self.closed, 'attempting writes to a closed writer'
         data = jsonencode(item)
         if len(data) > self.maxitemsize:
+            truncated_data = data[:self.ERRMSG_DATA_TRUNCATION_LEN] + "..."
             temp_logger = logging.getLogger('HubstorageClient')
             temp_logger.warning('BatchWriter: item size is {}'.format(len(data)))
-            temp_logger.warning('Max item size {}'.format(self.maxitemsize))
-            temp_logger.warning('BatchWriter: data {}'.format(data))
-            truncated_data = data[:self.ERRMSG_DATA_TRUNCATION_LEN] + "..."
+            temp_logger.warning('BatchWriter: type is {}'.format(type(data)))
             raise ValueTooLarge(
                 'Value exceeds max encoded size of {} bytes: {!r}'
                 .format(self.maxitemsize, truncated_data))
