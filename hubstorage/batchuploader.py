@@ -228,7 +228,9 @@ class _BatchWriter(object):
             temp_logger.info('BatchWriter: type is {}'.format(type(data)))
             temp_logger.info('BatchWriter: item type {}'.format(type(item)))
             js = json.loads(data)
-            temp_logger.info('BatchWriter: js {}'.format(js.keys()))
+            temp_logger.info('BatchWriter: data keys {}'.format(js.keys()))
+            if getattr(item, 'keys', None):
+                temp_logger.info('BatchWriter: item keys {}'.format(item.keys()))
             raise ValueTooLarge(
                 'Value exceeds max encoded size of {} bytes: {!r}'
                 .format(self.maxitemsize, truncated_data))
