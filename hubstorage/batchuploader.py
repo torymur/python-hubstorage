@@ -12,6 +12,7 @@ from Queue import Queue
 from threading import Thread, Event
 from .utils import xauth, iterqueue
 from .serialization import jsonencode
+import json
 
 logger = logging.getLogger('hubstorage.batchuploader')
 
@@ -223,8 +224,11 @@ class _BatchWriter(object):
         if len(data) > self.maxitemsize:
             truncated_data = data[:self.ERRMSG_DATA_TRUNCATION_LEN] + "..."
             temp_logger = logging.getLogger('HubstorageClient')
-            temp_logger.warning('BatchWriter: item size is {}'.format(len(data)))
-            temp_logger.warning('BatchWriter: type is {}'.format(type(data)))
+            temp_logger.info('BatchWriter: item size is {}'.format(len(data)))
+            temp_logger.info('BatchWriter: type is {}'.format(type(data)))
+            temp_logger.info('BatchWriter: item type {}'.format(type(item)))
+            js = json.loads(data)
+            temp_logger.info('BatchWriter: js {}'.format(js.keys()))
             raise ValueTooLarge(
                 'Value exceeds max encoded size of {} bytes: {!r}'
                 .format(self.maxitemsize, truncated_data))
