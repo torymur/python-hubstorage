@@ -231,6 +231,16 @@ class _BatchWriter(object):
             temp_logger.info('BatchWriter: data keys {}'.format(js.keys()))
             if getattr(item, 'keys', None):
                 temp_logger.info('BatchWriter: item keys {}'.format(item.keys()))
+
+                for key, value in item.items():
+                    d = {}
+                    d[key] = value
+                    res = jsonencode(d)
+                    temp_logger.info('BatchWriter: value type {}'.format(type(value)))
+                    temp_logger.info('BatchWriter: for key {} JSONENCODE size is {}'.format(key, len(res)))
+                    if getattr(value, '__len__', None):
+                        temp_logger.info('BatchWriter: for key {} size is {}'.format(key, len(value)))
+
             raise ValueTooLarge(
                 'Value exceeds max encoded size of {} bytes: {!r}'
                 .format(self.maxitemsize, truncated_data))
