@@ -225,14 +225,14 @@ class _BatchWriter(object):
             truncated_data = data[:self.ERRMSG_DATA_TRUNCATION_LEN] + "..."
             temp_logger = logging.getLogger('HubstorageClient')
             temp_logger.info('BatchWriter: item size is {}'.format(len(data)))
-            temp_logger.info('BatchWriter: type is {}'.format(type(data)))
+            temp_logger.info('BatchWriter: data type is {}'.format(type(data)))
             temp_logger.info('BatchWriter: item type {}'.format(type(item)))
             js = json.loads(data)
             temp_logger.info('BatchWriter: data keys {}'.format(js.keys()))
             if getattr(item, 'keys', None):
                 temp_logger.info('BatchWriter: item keys {}'.format(item.keys()))
 
-                for key, value in item.items():
+                for key, value in item['message'].items():
                     d = {}
                     d[key] = value
                     res = jsonencode(d)
