@@ -221,6 +221,7 @@ class _BatchWriter(object):
     def write(self, item):
         assert not self.closed, 'attempting writes to a closed writer'
         data = jsonencode(item)
+
         if len(data) > self.maxitemsize:
             truncated_data = data[:self.ERRMSG_DATA_TRUNCATION_LEN] + "..."
             temp_logger = logging.getLogger('HubstorageClient')
@@ -229,17 +230,17 @@ class _BatchWriter(object):
             temp_logger.info('BatchWriter: item type {}'.format(type(item)))
             js = json.loads(data)
             temp_logger.info('BatchWriter: data keys {}'.format(js.keys()))
+
             if getattr(item, 'keys', None):
                 temp_logger.info('BatchWriter: item keys {}'.format(item.keys()))
 
-                for key, value in item['message'].items():
+                for key, value in item.items():
                     d = {}
                     d[key] = value
                     res = jsonencode(d)
-                    temp_logger.info('BatchWriter: value type {}'.format(type(value)))
-                    temp_logger.info('BatchWriter: for key {} JSONENCODE size is {}'.format(key, len(res)))
+                    temp_logger.info('BatchWriter: key <{}> JSONENCODE size is {}, value type {}'.format(key, len(res), type(value)))
                     if getattr(value, '__len__', None):
-                        temp_logger.info('BatchWriter: for key {} size is {}'.format(key, len(value)))
+                        temp_logger.info('BatchWriter: key <{}> value size is {}'.format(key, len(value)))
 
             raise ValueTooLarge(
                 'Value exceeds max encoded size of {} bytes: {!r}'
